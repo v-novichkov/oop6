@@ -1,3 +1,6 @@
+import statistics
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -7,28 +10,51 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
 
-    def rate_mentors(self, mentor, course, grade):
-        if isinstance(mentor, Mentor) and course in mentor.courses_attached:
-            if course in mentor.mentors_grades:
-                mentor.mentors_grades[course] += [grade]
+    def rate_mentors(self, Lecturer, course, grade):
+        if isinstance(Lecturer, Lecturer) and course in Lecturer.courses_attached:
+            if course in Lecturer.teach_grades:
+                Lecturer.teach_grades[course] += [grade]
             else:
-                mentor.mentors_grades[course] = [grade]
+                Lecturer.teach_grades[course] = [grade]
         else:
             return 'Ошибка'
+
+    def mid_grade(self):
+        grades = self.grades.values()
+        grades_list = sum(grades, [])
+        middle_grade = statistics.mean(grades_list)
+        return middle_grade
+
+    def __str__(self):
+        res = f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: {mid_grade} \nКурсы в процессе изучения: {",".join(self.courses_in_progress)} \nЗавершенные курсы: {",".join(self.finished_courses)}'
+        return res
 
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
         self.surname = surname
         self.courses_attached = []
-        self.mentors_grades = {}
 
 
 class Lecturer(Mentor):
-    pass
+    def __init__(self, name, surname):
+        super().__init__(name, surname)
+        self.grades = {}
+
+    def mid_grade(self):
+        grades = self.grades.values()
+        grades_list = sum(grades, [])
+        middle_grade = statistics.mean(grades_list)
+        return middle_grade
+
+    def __str__(self):
+        res = f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: {mid_grade}'
+        return res
+
+
 
 class Reviewer(Mentor):
-     def rate_hw(self, student, course, grade):
+    def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
             if course in student.grades:
                 student.grades[course] += [grade]
@@ -37,16 +63,18 @@ class Reviewer(Mentor):
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        res = f'Имя: {self.name} \nФамилия: {self.surname}'
+        return res
 
-
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
-
-cool_mentor = Mentor('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
-
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-
-print(best_student.grades)
+# best_student = Student('Ruoy', 'Eman', 'your_gender')
+# best_student.courses_in_progress += ['Python']
+#
+# cool_mentor = Mentor('Some', 'Buddy')
+# cool_mentor.courses_attached += ['Python']
+#
+# cool_mentor.rate_hw(best_student, 'Python', 10)
+# cool_mentor.rate_hw(best_student, 'Python', 10)
+# cool_mentor.rate_hw(best_student, 'Python', 10)
+#
+# print(best_student.grades)
