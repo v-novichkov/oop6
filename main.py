@@ -29,6 +29,12 @@ class Student:
         res = f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: {mid_grade} \nКурсы в процессе изучения: {",".join(self.courses_in_progress)} \nЗавершенные курсы: {",".join(self.finished_courses)}'
         return res
 
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            print("f'{other} - не является студентом")
+            return
+        return self.mid_grade < other.mid_grade
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -51,7 +57,11 @@ class Lecturer(Mentor):
         res = f'Имя: {self.name} \nФамилия: {self.surname} \nСредняя оценка за лекции: {mid_grade}'
         return res
 
-
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print("f'{other} - не является лектором")
+            return
+        return self.mid_grade < other.mid_grade
 
 class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
